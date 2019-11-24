@@ -4,18 +4,6 @@
     <div class="country-grid">
       <div class="country-grid-item">
         <img class="flag" :src="country.flag" alt="Flag" />
-        <div class="mapouter">
-          <!-- <iframe
-            width="600"
-            height="500"
-            id="gmap_canvas"
-            src="https://maps.google.com/maps?q=university%20of%20san%20francisco&t=&z=13&ie=UTF8&iwloc=&output=embed"
-            frameborder="0"
-            scrolling="no"
-            marginheight="0"
-            marginwidth="0"
-          ></iframe> -->
-        </div>
       </div>
       <div class="country-grid-item">
         <h1>{{country.name}}</h1>
@@ -76,6 +64,16 @@ export default {
   components: {
     VAsync
   },
+  computed: {
+    pageTitle() {
+      return this.country.name
+    }
+  },
+  head() {
+    return {
+      title: this.pageTitle
+    }
+  },
   methods: {
     httpRequest(url) {
       return fetch("https://restcountries.eu/rest/v2/alpha/" + url).then(res =>
@@ -89,6 +87,7 @@ export default {
 <style>
 h1 {
   margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
 
 .button-link {
@@ -112,6 +111,10 @@ h1 {
   border-color: var(--light-gray);
 }
 
+.country-grid-item:first-child {
+  margin-bottom: 2rem;
+}
+
 .app-wrapper.dark .button-link {
   background-color: var(--dark-blue);
   color: var(--white);
@@ -131,6 +134,14 @@ h1 {
   margin: 0;
   list-style: none;
   display: inline-block;
+}
+
+.internal-grid > div {
+  margin-bottom: 0.5rem;
+}
+
+.internal-grid > div:nth-child(5) {
+  margin-bottom: 2rem;
 }
 
 .delimited:not(:last-child)::after {
@@ -154,6 +165,10 @@ h1 {
 }
 
 @media (min-width: 1024px) {
+  h1 {
+    font-size: 2rem;
+  }
+
   .country-grid,
   .internal-grid {
     display: grid;
@@ -168,6 +183,14 @@ h1 {
     grid-row-gap: 5px;
     grid-column-gap: 5px;
     grid-template-rows: 1fr 1fr 1fr 1fr;
+  }
+
+  .internal-grid > div {
+    margin-bottom: initial;
+  }
+
+  .internal-grid > div:nth-child(5) {
+    margin-bottom: initial;
   }
 }
 </style>
