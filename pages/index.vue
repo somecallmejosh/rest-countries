@@ -29,9 +29,9 @@
         </div>
         <div class="grid-text">
           <h2>{{item.name}}</h2>
-          <p v-if="item.population">Population: {{item.population.toLocaleString()}}</p>
-          <p v-if="item.region">Region: {{item.region}}</p>
-          <p v-if="item.capital">Capital: {{item.capital}}</p>
+          <p v-if="item.population"><strong>Population:</strong> {{item.population.toLocaleString()}}</p>
+          <p v-if="item.region"><strong>Region:</strong> {{item.region}}</p>
+          <p v-if="item.capital"><strong>Capital:</strong> {{item.capital}}</p>
         </div>
       </nuxt-link>
     </div>
