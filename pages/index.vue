@@ -29,7 +29,7 @@
         </div>
         <div class="grid-text">
           <h2>{{item.name}}</h2>
-          <p v-if="item.population">Population: {{item.population}}</p>
+          <p v-if="item.population">Population: {{item.population.toLocaleString()}}</p>
           <p v-if="item.region">Region: {{item.region}}</p>
           <p v-if="item.capital">Capital: {{item.capital}}</p>
         </div>
