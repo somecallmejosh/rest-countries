@@ -1,0 +1,16 @@
+:root {
+  --dark-blue: hsl(209, 23%, 22%);
+  --very-dark-blue: hsl(207, 26%, 17%);
+  --text-very-dark-blue: hsl(200, 15%, 8%);
+  --dark-gray: hsl(0, 0%, 52%);
+  --very-light-gray: hsl(0, 0%, 98%);
+  --light-gray: hsl(0, 0%, 85%);
+  --white: hsl(0, 0%, 100%);
+  --text-default: 1rem;
+  --text-small: 0.875rem;
+  --black: #000;
+  --box-shadow: 0 0 10px rgba(0,0,0,.1); 
+  --box-shadow-hover: 0 0 15px rgba(0,0,0,.2); 
+
+  --border-radius: 6px;
+}
