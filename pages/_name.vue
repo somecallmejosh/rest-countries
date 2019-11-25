@@ -8,34 +8,58 @@
       <div class="country-grid-item">
         <h1>{{country.name}}</h1>
         <div class="internal-grid">
-          <div v-if="country.NativeName"><strong>Native Name:</strong>  {{country.NativeName}}</div>
-          <div v-if="country.population"><strong>Population:</strong> {{country.population.toLocaleString()}}</div>
-          <div v-if="country.region"><strong>Region:</strong> {{country.region}}</div>
-          <div v-if="country.subregion"><strong>Sub Region:</strong> {{country.subregion}}</div>
-          <div v-if="country.capital"><strong>Capital:</strong> {{country.capital}}</div>
+          <div v-if="country.NativeName">
+            <strong>Native Name:</strong>
+            {{country.NativeName}}
+          </div>
+          <div v-if="country.population">
+            <strong>Population:</strong>
+            {{country.population.toLocaleString()}}
+          </div>
+          <div v-if="country.region">
+            <strong>Region:</strong>
+            {{country.region}}
+          </div>
+          <div v-if="country.subregion">
+            <strong>Sub Region:</strong>
+            {{country.subregion}}
+          </div>
+          <div v-if="country.capital">
+            <strong>Capital:</strong>
+            {{country.capital}}
+          </div>
           <div v-if="country.topLevelDomain">
             <ul class="inline-list">
-              <li><strong>Top Level Domain:</strong></li>
+              <li>
+                <strong>Top Level Domain:</strong>
+              </li>
               <li class="delimited" v-for="(tld, index) in country.topLevelDomain">{{tld}}</li>
             </ul>
           </div>
           <div v-if="country.currencies">
-            <ul class="inline-list" >
-              <li><strong>Currencies:</strong></li>
-              <li v-for="(currency, index) in country.currencies" class="delimited">{{currency.name}}</li>
+            <ul class="inline-list">
+              <li>
+                <strong>Currencies:</strong>
+              </li>
+              <li
+                v-for="(currency, index) in country.currencies"
+                class="delimited"
+              >{{currency.name}}</li>
             </ul>
           </div>
-          <div v-if="country.languages"><strong>Languages:</strong>
+          <div v-if="country.languages">
+            <strong>Languages:</strong>
             <ul class="inline-list">
               <li class="delimited" v-for="(language, index) in country.languages">{{language.name}}</li>
             </ul>
           </div>
         </div>
-        
+
         <div v-if="country.borders.length">
-          
           <ul class="inline-list button-list">
-            <li><strong>Border Countries:</strong></li>
+            <li>
+              <strong>Border Countries:</strong>
+            </li>
             <li v-for="(borderCountry, index) in country.borders" :key="index">
               <VAsync :await="httpRequest(borderCountry)">
                 <template #resolved="results">
@@ -51,20 +75,18 @@
 </template>
 
 <script>
-import axios from "axios"
 import { VAsync } from "vuetensils"
 export default {
-  asyncData({ route, params }) {
-    return axios
-      .get("https://restcountries.eu/rest/v2/alpha/" + route.params.name)
-      .then(res => {
-        return { country: res.data }
-      })
+  async fetch({ store, params, route }) {
+    await store.dispatch("countries/fetchCurrentCountry", route.params.name)
   },
   components: {
     VAsync
   },
   computed: {
+    country() {
+      return this.$store.state.countries.currentCountry
+    },
     pageTitle() {
       return this.country.name
     }

@@ -1,7 +1,8 @@
 const pkg = require("./package")
+import axios from "axios"
 
 module.exports = {
-  mode: "spa",
+  mode: "universal",
 
   /*
   ** Headers of the page
@@ -53,6 +54,7 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
+    baseURL: "https://restcountries.eu/rest/v2/"
   },
 
   /*
@@ -72,6 +74,12 @@ module.exports = {
       //     exclude: /(node_modules)/
       //   })
       // }
+    }
+  },
+  generate: {
+    async routes() {
+      let response = await axios.get("https://restcountries.eu/rest/v2/all/")
+      return response.data.map(country => `/${country.alpha3Code}`)
     }
   }
 }

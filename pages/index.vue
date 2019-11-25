@@ -3,18 +3,28 @@
     <div class="filters">
       <div class="form-field-wrap">
         <label for="search" class="visuallyhidden">Search</label>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
-        <input type="search" id="search" name="search" v-model="search" placeholder="Search for a country" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path
+            d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
+          />
+        </svg>
+        <input
+          type="search"
+          id="search"
+          name="search"
+          v-model="search"
+          placeholder="Search for a country"
+        />
       </div>
 
       <div class="form-field-wrap">
         <label for="regions" class="visuallyhidden">Filter by Region</label>
         <select name="regions" id="regions" v-model="search">
-        <option value class="placeholder" hidden>Filter by region</option>
-        <template v-for="item in filteredRegions">
-          <option :value="item" v-if="item.length">{{item}}</option>
-        </template>
-      </select>
+          <option value class="placeholder" hidden>Filter by region</option>
+          <template v-for="item in filteredRegions">
+            <option :value="item" v-if="item.length">{{item}}</option>
+          </template>
+        </select>
       </div>
     </div>
     <div class="grid">
@@ -25,13 +35,22 @@
         :key="index"
       >
         <div class="grid-image">
-          <VImg :src="item.flag" :alt="item.name + ' flag'" />
+          <img :src="item.flag" :alt="item.name + ' flag'" />
         </div>
         <div class="grid-text">
           <h2>{{item.name}}</h2>
-          <p v-if="item.population"><strong>Population:</strong> {{item.population.toLocaleString()}}</p>
-          <p v-if="item.region"><strong>Region:</strong> {{item.region}}</p>
-          <p v-if="item.capital"><strong>Capital:</strong> {{item.capital}}</p>
+          <p v-if="item.population">
+            <strong>Population:</strong>
+            {{item.population.toLocaleString()}}
+          </p>
+          <p v-if="item.region">
+            <strong>Region:</strong>
+            {{item.region}}
+          </p>
+          <p v-if="item.capital">
+            <strong>Capital:</strong>
+            {{item.capital}}
+          </p>
         </div>
       </nuxt-link>
     </div>
@@ -39,7 +58,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import { VImg } from "vuetensils"
 
 class Country {
@@ -53,16 +71,18 @@ class Country {
 }
 
 export default {
-  asyncData({ params }) {
-    return axios.get("https://restcountries.eu/rest/v2/all").then(res => {
-      return { countries: res.data }
-    })
+  async fetch({ store }) {
+    await store.dispatch("countries/fetchAllCountries")
   },
   components: {
     VImg
   },
   computed: {
-    filteredList() {
+    countries() {
+      return this.$store.state.countries.allCountries[0]
+    },
+
+    filteredList({ store }) {
       return this.countries.filter(country => {
         return (
           country.name.toLowerCase().includes(this.search.toLowerCase()) ||
@@ -70,7 +90,8 @@ export default {
         )
       })
     },
-    filteredRegions() {
+
+    filteredRegions({ store }) {
       return this.countries
         .map(item => item.region)
         .filter((value, index, self) => {
@@ -128,7 +149,8 @@ p {
 }
 
 .grid-item img {
-  height: auto;
+  height: 160px;
+  object-fit: cover;
   width: 100%;
   max-width: 100%;
 }
